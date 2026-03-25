@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EcoSecure DevAI — AI-Powered DevOps Security</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#050810;--bg2:#090d1a;--bg3:#0d1326;--border:rgba(99,130,255,0.12);--border2:rgba(99,130,255,0.25);--accent:#3b6bff;--accent2:#5c87ff;--glow:rgba(59,107,255,0.18);--text:#e8eaf6;--text2:#8b93b8;--text3:#4a5280;--success:#22d3a0;--warning:#f59e0b;--danger:#f43f5e;--info:#38bdf8;--mono:'IBM Plex Mono',monospace;--sans:'DM Sans',sans-serif;--display:'Syne',sans-serif}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7;overflow-x:hidden}
+  ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,16,0.92);backdrop-filter:blur(16px);border-bottom:.5px solid var(--border)}
+  .nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:16px;font-weight:700;color:var(--text);cursor:pointer}
+  .nav-logo-icon{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{color:var(--text2);text-decoration:none;font-size:13px;transition:color .2s;cursor:pointer}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{background:var(--accent)!important;color:#fff!important;padding:7px 18px;border-radius:8px;font-weight:500}
+  .nav-cta:hover{background:var(--accent2)!important}
+  .conn-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:20px;border:.5px solid var(--border2);color:var(--text3);transition:all .3s;cursor:pointer}
+  .conn-pill:hover{border-color:var(--accent);color:var(--text2)}
+  .conn-pill.connected{border-color:rgba(34,211,160,.35);color:var(--success);background:rgba(34,211,160,.06)}
+  .conn-pill.error{border-color:rgba(244,63,94,.35);color:var(--danger);background:rgba(244,63,94,.06)}
+  .cdot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+  .conn-pill.connected .cdot{animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .demo-ribbon{position:fixed;top:60px;left:0;right:0;z-index:90;display:flex;align-items:center;gap:10px;padding:7px 40px;background:rgba(59,107,255,.08);border-bottom:.5px solid var(--border);font-size:12px;color:var(--text3)}
+  .demo-ribbon.hidden{display:none}
+  .demo-badge{font-family:var(--mono);font-size:10px;background:rgba(59,107,255,.15);color:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:.5px}
+  .demo-url{font-family:var(--mono);font-size:11px;color:var(--text2)}
+  .demo-retry{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--accent2);cursor:pointer;padding:3px 10px;border:.5px solid var(--border2);border-radius:5px;transition:background .2s}
+  .demo-retry:hover{background:rgba(59,107,255,.12)}
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:130px 40px 80px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(59,107,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(59,107,255,.055) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+  .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+  .orb1{width:480px;height:480px;background:radial-gradient(circle,rgba(59,107,255,.14),transparent 70%);top:10%;left:50%;transform:translateX(-50%);animation:orbf 8s ease-in-out infinite}
+  .orb2{width:260px;height:260px;background:radial-gradient(circle,rgba(34,211,160,.07),transparent 70%);bottom:20%;right:8%;animation:orbf 10s ease-in-out infinite reverse}
+  @keyframes orbf{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-16px)}}
+  .hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(59,107,255,.1);border:.5px solid var(--border2);border-radius:20px;padding:5px 14px;font-family:var(--mono);font-size:11px;color:var(--accent2);letter-spacing:.5px;margin-bottom:26px;animation:fadeUp .5s ease both}
+  .bdot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:pulse 2s infinite}
+  .hero-title{font-family:var(--display);font-size:clamp(38px,5.5vw,68px);font-weight:800;line-height:1.08;letter-spacing:-2px;margin-bottom:22px;animation:fadeUp .5s .08s ease both}
+  .blue{color:var(--accent2)}.outline{-webkit-text-stroke:1.5px var(--accent);color:transparent}
+  .hero-sub{font-size:16px;color:var(--text2);max-width:540px;line-height:1.65;margin-bottom:36px;animation:fadeUp .5s .16s ease both}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:52px;animation:fadeUp .5s .24s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:12px 26px;border-radius:10px;font-family:var(--sans);font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;box-shadow:0 0 24px rgba(59,107,255,.28)}
+  .btn-p:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 0 36px rgba(59,107,255,.42)}
+  .btn-g{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text);padding:12px 26px;border-radius:10px;border:.5px solid var(--border2);font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:background .2s,transform .15s}
+  .btn-g:hover{background:rgba(255,255,255,.04);transform:translateY(-2px)}
+  .hero-term{width:100%;max-width:680px;background:var(--bg2);border:.5px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 0 60px rgba(59,107,255,.1),0 40px 80px rgba(0,0,0,.5);animation:fadeUp .6s .32s ease both;text-align:left}
+  .t-bar{display:flex;align-items:center;gap:6px;padding:11px 16px;background:var(--bg3);border-bottom:.5px solid var(--border)}
+  .t-dot{width:10px;height:10px;border-radius:50%}.tr{background:#ff5f56}.ty{background:#ffbd2e}.tg{background:#27c93f}
+  .t-lbl{margin-left:8px;font-family:var(--mono);font-size:11px;color:var(--text3)}
+  .t-body{padding:18px 22px;font-family:var(--mono);font-size:12px;line-height:2}
+  .trow{display:flex;gap:10px}
+  .tp{color:var(--accent2)}.tc{color:var(--text)}.ti{color:var(--info)}.tw{color:var(--warning)}.tok{color:var(--success)}.td{color:var(--text3)}
+  .cursor{display:inline-block;width:7px;height:13px;background:var(--accent2);margin-left:2px;vertical-align:middle;animation:blink 1s infinite}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  .section{padding:90px 40px;max-width:1160px;margin:0 auto}
+  .sec-lbl{font-family:var(--mono);font-size:11px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+  .sec-title{font-family:var(--display);font-size:clamp(26px,3.8vw,42px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:14px}
+  .sec-sub{font-size:15px;color:var(--text2);max-width:480px;line-height:1.65}
+  .divider{height:.5px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 40px}
+  .flow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:.5px solid var(--border);border-radius:14px;overflow:hidden;margin-top:48px}
+  .flow-step{background:var(--bg2);padding:30px 24px;position:relative;transition:background .2s}
+  .flow-step:hover{background:var(--bg3)}
+  .snum{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:14px;letter-spacing:1px}
+  .sico{width:40px;height:40px;border-radius:10px;background:var(--glow);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:16px}
+  .stitle{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:7px}
+  .sdesc{font-size:13px;color:var(--text2);line-height:1.6}
+  .sarr{position:absolute;top:50%;right:-13px;transform:translateY(-50%);width:26px;height:26px;background:var(--bg);border:.5px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--accent2);z-index:2}
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+  .feat-card{background:var(--bg2);border:.5px solid var(--border);border-radius:12px;padding:24px 20px;transition:border-color .2s,transform .2s,box-shadow .2s}
+  .feat-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 8px 28px rgba(59,107,255,.1)}
+  .ficon{font-size:22px;margin-bottom:12px;display:block}
+  .ftitle{font-family:var(--display);font-size:14px;font-weight:700;margin-bottom:7px}
+  .fdesc{font-size:13px;color:var(--text2);line-height:1.6}
+  #dashboard{display:none}
+  .dash-layout{display:flex;min-height:100vh;padding-top:60px}
+  .sidebar{width:210px;flex-shrink:0;background:var(--bg2);border-right:.5px solid var(--border);padding:20px 0;position:fixed;top:60px;left:0;bottom:0;overflow-y:auto}
+  .sb-sec{padding:6px 16px 10px;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase}
+  .sb-link{display:flex;align-items:center;gap:9px;padding:8px 18px;font-size:13px;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all .15s}
+  .sb-link:hover{background:rgba(255,255,255,.03);color:var(--text)}
+  .sb-link.active{color:var(--accent2);background:rgba(59,107,255,.08);border-left-color:var(--accent)}
+  .sb-icon{font-size:14px;width:18px;text-align:center}
+  .sb-badge{margin-left:auto;font-family:var(--mono);font-size:10px;background:rgba(244,63,94,.15);color:#f43f5e;padding:2px 7px;border-radius:10px}
+  .dash-main{flex:1;margin-left:210px;background:var(--bg)}
+  .status-bar{display:flex;align-items:center;gap:8px;padding:7px 28px;font-family:var(--mono);font-size:11px;color:var(--text3);border-bottom:.5px solid var(--border);background:var(--bg2)}
+  .status-bar.online{color:var(--success);background:rgba(34,211,160,.05);border-bottom-color:rgba(34,211,160,.15)}
+  .status-bar.offline{color:var(--danger);background:rgba(244,63,94,.05);border-bottom-color:rgba(244,63,94,.15)}
+  .status-bar.demo{color:var(--accent2);background:rgba(59,107,255,.04);border-bottom-color:rgba(59,107,255,.15)}
+  .spulse{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+  .dash-inner{padding:24px 28px}
+  .dash-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+  .dash-title{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:-.4px}
+  .dash-sub{font-size:12px;color:var(--text2);margin-top:3px}
+  .dash-acts{display:flex;gap:8px}
+  .bsm{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;font-family:var(--sans);font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
+  .bsm-p{background:var(--accent);color:#fff;box-shadow:0 0 14px rgba(59,107,255,.25)}
+  .bsm-p:hover{background:var(--accent2)}
+  .bsm-g{background:var(--bg2);color:var(--text2);border:.5px solid var(--border2)}
+  .bsm-g:hover{color:var(--text);background:var(--bg3)}
+  .bsm-w{background:rgba(245,158,11,.12);color:var(--warning);border:.5px solid rgba(245,158,11,.25)}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .metric{background:var(--bg2);border:.5px solid var(--border);border-radius:11px;padding:18px 20px;transition:border-color .2s}
+  .metric:hover{border-color:var(--border2)}
+  .m-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+  .m-val{font-family:var(--display);font-size:28px;font-weight:700;line-height:1}
+  .m-note{font-size:11px;color:var(--text3);margin-top:5px}
+  .two-col{display:grid;grid-template-columns:1fr 320px;gap:14px;margin-bottom:14px}
+  .panel{background:var(--bg2);border:.5px solid var(--border);border-radius:11px;overflow:hidden}
+  .p-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:.5px solid var(--border)}
+  .p-title{font-family:var(--display);font-size:13px;font-weight:700}
+  .p-act{font-size:11px;color:var(--accent2);cursor:pointer;background:none;border:none;font-family:var(--sans)}
+  .log-list{max-height:300px;overflow-y:auto}
+  .log-row{display:flex;align-items:flex-start;gap:9px;padding:9px 18px;border-bottom:.5px solid var(--border);transition:background .1s}
+  .log-row:hover{background:rgba(255,255,255,.015)}
+  .log-row:last-child{border-bottom:none}
+  .log-tag{font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:2px;text-transform:uppercase;letter-spacing:.3px}
+  .tag-info{background:rgba(56,189,248,.1);color:var(--info)}.tag-success{background:rgba(34,211,160,.1);color:var(--success)}.tag-warning{background:rgba(245,158,11,.1);color:var(--warning)}.tag-error{background:rgba(244,63,94,.1);color:var(--danger)}
+  .log-msg{font-size:12px;color:var(--text2);line-height:1.5;flex:1;font-family:var(--mono)}
+  .log-time{font-family:var(--mono);font-size:10px;color:var(--text3);flex-shrink:0}
+  .vuln-list{padding:10px;display:flex;flex-direction:column;gap:7px;max-height:320px;overflow-y:auto}
+  .vuln-card{background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:12px;cursor:pointer;transition:border-color .2s}
+  .vuln-card:hover{border-color:var(--border2)}
+  .vuln-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .vuln-file{font-family:var(--mono);font-size:10px;color:var(--accent2)}
+  .sev{font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;letter-spacing:.8px;text-transform:uppercase}
+  .sev-critical{background:rgba(244,63,94,.15);color:#f43f5e}.sev-high{background:rgba(245,158,11,.15);color:#f59e0b}.sev-medium{background:rgba(251,191,36,.12);color:#fbbf24}.sev-low{background:rgba(34,211,160,.12);color:#22d3a0}
+  .vuln-type{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px}
+  .vuln-cwe{font-family:var(--mono);font-size:10px;color:var(--text3)}
+  .vuln-mr{margin-top:7px;display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--accent2);background:rgba(59,107,255,.08);padding:2px 9px;border-radius:4px;border:.5px solid rgba(59,107,255,.2)}
+  .mr-list .mr-row{display:flex;align-items:center;gap:11px;padding:11px 18px;border-bottom:.5px solid var(--border);transition:background .1s;cursor:pointer}
+  .mr-row:hover{background:rgba(255,255,255,.015)}
+  .mr-row:last-child{border-bottom:none}
+  .mr-ico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .ico-open{background:rgba(34,211,160,.12)}.ico-merged{background:rgba(59,107,255,.12)}
+  .mr-info{flex:1}.mr-title{font-size:12px;font-weight:500}.mr-meta{font-size:11px;color:var(--text3);margin-top:2px}
+  .mr-st{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px}
+  .st-open{background:rgba(34,211,160,.12);color:var(--success)}.st-merged{background:rgba(59,107,255,.12);color:var(--accent2)}
+  .empty{padding:32px 20px;text-align:center;color:var(--text3);font-size:13px;line-height:1.7}
+  .empty-icon{font-size:26px;margin-bottom:10px}
+  .spinner{display:inline-block;width:13px;height:13px;border:2px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin .6s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .modal-bd{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);align-items:center;justify-content:center}
+  .modal-bd.open{display:flex}
+  .modal{background:var(--bg2);border:.5px solid var(--border2);border-radius:16px;padding:30px;width:440px;max-width:95vw;box-shadow:0 0 60px rgba(59,107,255,.18)}
+  .modal-title{font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:5px}
+  .modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6}
+  .fg{margin-bottom:13px}
+  .flbl{font-size:12px;color:var(--text2);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+  .finput{width:100%;padding:9px 13px;background:var(--bg3);color:var(--text);border:.5px solid var(--border2);border-radius:8px;font-family:var(--mono);font-size:12px;outline:none;transition:border-color .2s}
+  .finput:focus{border-color:var(--accent)}
+  .finput::placeholder{color:var(--text3)}
+  .fhint{font-size:11px;color:var(--text3);margin-top:4px}
+  .fhint a{color:var(--accent2);text-decoration:none}
+  .fhint a:hover{text-decoration:underline}
+  .modal-acts{display:flex;gap:10px;margin-top:18px}
+  .cfg-saved{font-size:11px;color:var(--success);display:none;margin-top:7px}
+  .cfg-saved.show{display:block}
+  .conn-status-block{background:var(--bg3);border:.5px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:16px;font-family:var(--mono);font-size:11px;line-height:2.2}
+  .cs-row{display:flex;justify-content:space-between;align-items:center}
+  .cs-key{color:var(--text3)}.cs-val{color:var(--text2)}.cs-val.ok{color:var(--success)}.cs-val.err{color:var(--danger)}
+  .scan-result{margin-top:13px;padding:12px;background:var(--bg3);border-radius:8px;border:.5px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text2);line-height:1.8;display:none;white-space:pre-wrap}
+  .scan-result.show{display:block}
+  .toast{position:fixed;bottom:24px;right:24px;z-index:300;background:var(--bg2);border:.5px solid var(--border2);border-radius:10px;padding:12px 18px;font-size:13px;box-shadow:0 8px 32px rgba(0,0,0,.4);display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;max-width:340px}
+  .toast.show{transform:translateY(0);opacity:1}
+  .toast.t-success{border-color:rgba(34,211,160,.3)}.toast.t-error{border-color:rgba(244,63,94,.3)}
+  footer{border-top:.5px solid var(--border);padding:34px 40px;display:flex;justify-content:space-between;align-items:center}
+  .foot-logo{font-family:var(--display);font-size:14px;font-weight:700;color:var(--text2)}
+  .foot-links{display:flex;gap:22px}
+  .foot-links a{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s}
+  .foot-links a:hover{color:var(--text2)}
+  .foot-copy{font-size:11px;color:var(--text3)}
+  #landing{display:block}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('landing')">
+    <div class="nav-logo-icon">🛡️</div>EcoSecure DevAI
+  </div>
+  <div class="nav-links">
+    <a onclick="showPage('landing')">Home</a>
+    <a href="#how-it-works" onclick="showPage('landing')">How it works</a>
+    <div class="conn-pill" id="conn-pill" onclick="openCfg()">
+      <span class="cdot"></span>
+      <span id="conn-label">Connecting...</span>
+    </div>
+    <a onclick="showPage('dashboard')" class="nav-cta">Dashboard →</a>
+  </div>
+</nav>
+
+<div class="demo-ribbon hidden" id="demo-ribbon">
+  <span class="demo-badge">DEMO MODE</span>
+  <span>Backend not detected at <span class="demo-url" id="ribbon-url">http://localhost:3001</span> — run <code>npm run dev</code> to go live</span>
+  <span class="demo-retry" onclick="fetchAll()">Retry →</span>
+</div>
+
+<div id="landing">
+  <section class="hero">
+    <div class="orb orb1"></div><div class="orb orb2"></div>
+    <div class="hero-badge"><span class="bdot"></span>AI AGENT · GITLAB NATIVE · GEMINI POWERED</div>
+    <h1 class="hero-title">Push code.<br/><span class="outline">Vulnerabilities</span> get <span class="blue">fixed.</span></h1>
+    <p class="hero-sub">EcoSecure DevAI is an event-driven AI agent that monitors your GitLab pushes, detects security issues, and automatically opens Merge Requests with AI-generated fixes.</p>
+    <div class="hero-ctas">
+      <button class="btn-p" onclick="showPage('dashboard');fetchAll()">
+      <button class="btn-g" onclick="showPage('landing');setTimeout(()=>document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'}),50)">See How It Works ↓</button>
+    </div>
+    <div class="hero-term">
+      <div class="t-bar"><div class="t-dot tr"></div><div class="t-dot ty"></div><div class="t-dot tg"></div><span class="t-lbl">ecosecure-devai — live agent log</span></div>
+      <div class="t-body">
+        <div class="trow"><span class="tp">›</span><span class="tc">npm run dev</span></div>
+        <div class="trow"><span class="tok">🚀 EcoSecure DevAI backend running on port 3001</span></div>
+        <div class="trow"><span class="td">   Webhook: POST /webhook/gitlab</span></div>
+        <div class="trow" style="margin-top:6px"><span class="ti">📥 Webhook received: Push Hook — my-app, main</span></div>
+        <div class="trow"><span class="ti">🛡️  Security Agent triggered for my-app</span></div>
+        <div class="trow"><span class="tw">⚠️  Found 2 issues — CRITICAL (SQL Injection, CWE-89)</span></div>
+        <div class="trow"><span class="tok">✅ MR opened: gitlab.com/my-app/-/merge_requests/42</span></div>
+        <div class="trow" style="margin-top:6px"><span class="tp">›</span><span class="cursor"></span></div>
+      </div>
+    </div>
+  </section>
+  <div class="divider"></div>
+  <section class="section" id="how-it-works">
+    <div class="sec-lbl">// CORE FLOW</div>
+    <h2 class="sec-title">Push code. Get a fix.<br/>Automatically.</h2>
+    <p class="sec-sub">Six steps, zero manual work. Every push triggers the full AI security pipeline.</p>
+    <div class="flow-grid">
+      <div class="flow-step"><div class="snum">01 —</div><div class="sico">📤</div><div class="stitle">Code Push</div><div class="sdesc">Developer pushes code to any branch on GitLab.</div><div class="sarr">→</div></div>
+      <div class="flow-step"><div class="snum">02 —</div><div class="sico">🔗</div><div class="stitle">Webhook Trigger</div><div class="sdesc">GitLab fires a push webhook to your backend server.</div><div class="sarr">→</div></div>
+      <div class="flow-step"><div class="snum">03 —</div><div class="sico">🤖</div><div class="stitle">AI Analysis</div><div class="sdesc">Security Agent fetches the diff and calls Gemini API.</div><div class="sarr">→</div></div>
+      <div class="flow-step"><div class="snum">04 —</div><div class="sico">🔍</div><div class="stitle">Issue Detection</div><div class="sdesc">Gemini returns vulnerability type, CWE ID, severity.</div><div class="sarr">→</div></div>
+      <div class="flow-step"><div class="snum">05 —</div><div class="sico">🛠️</div><div class="stitle">Fix Generation</div><div class="sdesc">AI generates fixed code. Branch created, fix committed.</div><div class="sarr">→</div></div>
+      <div class="flow-step"><div class="snum">06 —</div><div class="sico">📋</div><div class="stitle">Merge Request</div><div class="sdesc">Real GitLab MR opened with AI description, ready to review.</div></div>
+    </div>
+  </section>
+  <div class="divider"></div>
+  <section class="section" id="features">
+    <div class="sec-lbl">// CAPABILITIES</div>
+    <h2 class="sec-title">Two AI agents.<br/>Total coverage.</h2>
+    <p class="sec-sub">Security and code quality — handled automatically on every push.</p>
+    <div class="feat-grid">
+      <div class="feat-card"><span class="ficon">🛡️</span><div class="ftitle">Security Agent</div><div class="fdesc">Detects SQL injection, XSS, hardcoded secrets, and 20+ CWE categories using Gemini AI.</div></div>
+      <div class="feat-card"><span class="ficon">📝</span><div class="ftitle">Code Review Agent</div><div class="fdesc">Scores code quality 0–10 across readability, performance, and maintainability automatically.</div></div>
+      <div class="feat-card"><span class="ficon">⚡</span><div class="ftitle">Instant MR Creation</div><div class="fdesc">Opens real GitLab MRs with AI-written descriptions and complete fixed code — in seconds.</div></div>
+      <div class="feat-card"><span class="ficon">📊</span><div class="ftitle">Live Dashboard</div><div class="fdesc">Real-time logs, vulnerabilities, MR status — polled from your backend every 5 seconds.</div></div>
+      <div class="feat-card"><span class="ficon">☁️</span><div class="ftitle">Cloud Run Ready</div><div class="fdesc">Dockerized backend with one-command deploy to Google Cloud Run.</div></div>
+      <div class="feat-card"><span class="ficon">🔐</span><div class="ftitle">Webhook Security</div><div class="fdesc">HMAC token validation on all webhooks. Environment-based secrets only.</div></div>
+    </div>
+  </section>
+  <footer>
+    <div class="foot-logo">🛡️ EcoSecure DevAI</div>
+    <div class="foot-links"><a href="#">Docs</a><a href="#">GitHub</a><a href="#">API</a></div>
+    <div class="foot-copy">Powered by Gemini + GitLab · Hackathon MVP</div>
+  </footer>
+</div>
+
+<div id="dashboard">
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sb-sec">Overview</div>
+      <div class="sb-link active" onclick="setSb(this)"><span class="sb-icon">📊</span>Dashboard</div>
+      <div class="sb-link" onclick="setSb(this)"><span class="sb-icon">📋</span>Agent Logs</div>
+      <div class="sb-link" onclick="setSb(this)"><span class="sb-icon">🔍</span>Vulnerabilities<span class="sb-badge" id="v-cnt">0</span></div>
+      <div class="sb-link" onclick="setSb(this)"><span class="sb-icon">🔀</span>Merge Requests</div>
+      <div class="sb-sec" style="margin-top:10px">System</div>
+      <div class="sb-link" onclick="openCfg()"><span class="sb-icon">🔌</span>Connection</div>
+      <div class="sb-link" onclick="showPage('landing')"><span class="sb-icon">🏠</span>Landing Page</div>
+    </aside>
+    <main class="dash-main">
+      <div class="status-bar demo" id="status-bar">
+        <span class="spulse"></span>
+        <span id="status-msg">Connecting to backend...</span>
+        <span style="margin-left:auto;font-size:10px" id="last-upd"></span>
+      </div>
+      <div class="dash-inner">
+        <div class="dash-hdr">
+          <div>
+            <div class="dash-title">Security Overview</div>
+            <div class="dash-sub" id="dash-sub">Connecting to localhost:3001...</div>
+          </div>
+          <div class="dash-acts">
+            <button class="bsm bsm-g" onclick="fetchAll()">🔄 Refresh</button>
+            <button class="bsm bsm-g" onclick="openClearMod()">🗑 Clear Logs</button>
+            <button class="bsm bsm-p" onclick="openScanMod()">⚡ Trigger Scan</button>
+          </div>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="m-lbl">Total Events</div><div class="m-val" style="color:var(--accent2)" id="m-total">—</div><div class="m-note">from backend</div></div>
+          <div class="metric"><div class="m-lbl">MRs Created</div><div class="m-val" style="color:var(--success)" id="m-mrs">—</div><div class="m-note">auto-generated</div></div>
+          <div class="metric"><div class="m-lbl">Warnings</div><div class="m-val" style="color:var(--warning)" id="m-warn">—</div><div class="m-note">security issues</div></div>
+          <div class="metric"><div class="m-lbl">Errors</div><div class="m-val" style="color:var(--danger)" id="m-err">—</div><div class="m-note">agent errors</div></div>
+        </div>
+        <div class="two-col">
+          <div class="panel">
+            <div class="p-hdr">
+              <div class="p-title">Agent Logs <span id="log-spin" style="display:none"><span class="spinner"></span></span></div>
+              <button class="p-act" onclick="fetchAll()">Refresh</button>
+            </div>
+            <div class="log-list" id="log-list"><div class="empty"><div class="empty-icon">📋</div>Start backend then push code to GitLab to see live logs</div></div>
+          </div>
+          <div class="panel">
+            <div class="p-hdr"><div class="p-title">Vulnerabilities</div></div>
+            <div class="vuln-list" id="vuln-list"><div class="empty"><div class="empty-icon">🔍</div>No vulnerabilities yet</div></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="panel">
+            <div class="p-hdr"><div class="p-title">Merge Requests</div></div>
+            <div class="mr-list" id="mr-list"><div class="empty"><div class="empty-icon">🔀</div>No merge requests yet</div></div>
+          </div>
+          <div class="panel">
+            <div class="p-hdr"><div class="p-title">Connection</div></div>
+            <div style="padding:18px">
+              <div class="conn-status-block">
+                <div class="cs-row"><span class="cs-key">Backend</span><span class="cs-val" id="cs-url">localhost:3001</span></div>
+                <div class="cs-row"><span class="cs-key">Status</span><span class="cs-val" id="cs-status">Connecting...</span></div>
+                <div class="cs-row"><span class="cs-key">Uptime</span><span class="cs-val" id="cs-uptime">—</span></div>
+                <div class="cs-row"><span class="cs-key">Last poll</span><span class="cs-val" id="cs-poll">—</span></div>
+              </div>
+              <div style="font-size:12px;color:var(--text3);line-height:1.7;margin-bottom:12px">API keys (GitLab + Gemini) are configured in your backend <code style="color:var(--accent2)">.env</code> file — never stored in the browser.</div>
+              <button class="bsm bsm-g" style="width:100%;justify-content:center" onclick="openCfg()">🔌 Change Backend URL</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- CONNECTION MODAL — URL only, no API keys -->
+<div class="modal-bd" id="cfg-modal">
+  <div class="modal">
+    <div class="modal-title">🔌 Backend Connection</div>
+    <div class="modal-sub">Point the dashboard at your running backend. API keys stay in your backend <code style="color:var(--accent2)">.env</code> — they never touch the browser.</div>
+    <div class="fg">
+      <label class="flbl">Backend URL</label>
+      <input class="finput" id="c-url" placeholder="http://localhost:3001"/>
+      <div class="fhint">Default: <code>http://localhost:3001</code>. Use your <a href="https://ngrok.com" target="_blank">ngrok URL</a> when sharing externally.</div>
+    </div>
+    <div class="cfg-saved" id="cfg-saved">✅ Saved — reconnecting...</div>
+    <div class="modal-acts">
+      <button class="bsm bsm-p" style="flex:1" onclick="saveCfg()">💾 Save &amp; Reconnect</button>
+      <button class="bsm bsm-g" onclick="testConn()">🔌 Test</button>
+      <button class="bsm bsm-g" onclick="closeMod('cfg-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCAN MODAL -->
+<div class="modal-bd" id="scan-modal">
+  <div class="modal">
+    <div class="modal-title">⚡ Trigger Manual Scan</div>
+    <div class="modal-sub">Run the security agent on any project and commit without a webhook push.</div>
+    <div class="fg"><label class="flbl">GitLab Project ID</label><input class="finput" id="s-proj" placeholder="e.g. 12345678"/></div>
+    <div class="fg"><label class="flbl">Commit SHA</label><input class="finput" id="s-sha" placeholder="e.g. a1b2c3d4e5f6..."/></div>
+    <div class="fg"><label class="flbl">Branch</label><input class="finput" id="s-branch" placeholder="main"/></div>
+    <div class="scan-result" id="scan-res"></div>
+    <div class="modal-acts">
+      <button class="bsm bsm-p" style="flex:1" id="scan-btn" onclick="runScan()">Run Security Scan</button>
+      <button class="bsm bsm-g" onclick="closeMod('scan-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLEAR MODAL -->
+<div class="modal-bd" id="clear-modal">
+  <div class="modal" style="width:360px">
+    <div class="modal-title">🗑 Clear All Logs?</div>
+    <div class="modal-sub">Deletes all logs from backend memory. Cannot be undone.</div>
+    <div class="modal-acts">
+      <button class="bsm bsm-w" style="flex:1" onclick="clearLogs()">Yes, Clear</button>
+      <button class="bsm bsm-g" onclick="closeMod('clear-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Only the backend URL is stored — API keys stay in .env on the server
+const URL_KEY = 'ecosecure_url';
+const DEFAULT_URL = 'http://localhost:3001';
+const getUrl  = () => (localStorage.getItem(URL_KEY) || DEFAULT_URL).replace(/\/$/,'');
+const saveUrl = u  => localStorage.setItem(URL_KEY, u);
+
+let pollTimer = null, backendUp = false;
+
+function toast(msg, type='info', ms=3500) {
+  const t = document.getElementById('toast');
+  t.className = `toast t-${type} show`;
+  t.innerHTML = (type==='success'?'✅':type==='error'?'❌':'ℹ️') + ' ' + msg;
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), ms);
+}
+
+function showPage(p) {
+  document.getElementById('landing').style.display   = p==='landing'   ? 'block':'none';
+  document.getElementById('dashboard').style.display = p==='dashboard' ? 'block':'none';
+  window.scrollTo(0,0);
+  if (p==='dashboard') startPoll(); else stopPoll();
+}
+function setSb(el) { document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active')); el.classList.add('active'); }
+
+function openCfg() {
+  document.getElementById('c-url').value = getUrl();
+  document.getElementById('cfg-saved').classList.remove('show');
+  document.getElementById('cfg-modal').classList.add('open');
+}
+function saveCfg() {
+  const url = document.getElementById('c-url').value.trim().replace(/\/$/,'') || DEFAULT_URL;
+  saveUrl(url);
+  document.getElementById('cfg-saved').classList.add('show');
+  setTimeout(() => { closeMod('cfg-modal'); fetchAll(); }, 700);
+}
+async function testConn() {
+  const url = document.getElementById('c-url').value.trim().replace(/\/$/,'') || DEFAULT_URL;
+  try {
+    const r = await fetch(url+'/health', {signal:AbortSignal.timeout(5000)});
+    const d = await r.json();
+    toast('Backend reachable · uptime '+Math.round(d.uptime)+'s','success');
+  } catch { toast('Cannot reach backend — is it running?','error'); }
+}
+function closeMod(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-bd').forEach(b=>b.addEventListener('click',e=>{if(e.target===b)b.classList.remove('open')}));
+
+async function api(path, opts={}) {
+  const r = await fetch(getUrl()+path, {...opts, signal:AbortSignal.timeout(10000)});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+
+async function fetchAll() {
+  document.getElementById('log-spin').style.display = 'inline';
+  try {
+    const [stats, logs, vulns] = await Promise.all([api('/api/stats'), api('/api/logs?limit=100'), api('/api/vulnerabilities')]);
+    backendUp = true;
+    renderMetrics(stats); renderLogs(logs.logs||[]); renderVulns(vulns.vulnerabilities||[]); renderMRs(logs.logs||[]);
+    const now = new Date().toLocaleTimeString();
+    const shortUrl = getUrl().replace('http://','').replace('https://','');
+    setStatus('online','Live · '+getUrl());
+    document.getElementById('last-upd').textContent = 'Updated '+now;
+    document.getElementById('dash-sub').textContent = getUrl()+' · auto-refresh every 5s';
+    document.getElementById('cs-url').textContent   = shortUrl;
+    document.getElementById('cs-poll').textContent  = now;
+    document.getElementById('cs-status').textContent = 'Connected';
+    document.getElementById('cs-status').className  = 'cs-val ok';
+    setPill('connected', shortUrl);
+    document.getElementById('ribbon-url').textContent = getUrl();
+    document.getElementById('demo-ribbon').classList.add('hidden');
+    try { const h=await api('/health'); document.getElementById('cs-uptime').textContent=Math.round(h.uptime)+'s'; } catch(_){}
+  } catch(e) {
+    backendUp = false;
+    setStatus('demo','Demo mode · start backend to go live');
+    document.getElementById('dash-sub').textContent = 'Backend not running — start server to activate AI agent';
+    document.getElementById('cs-status').textContent = 'Unreachable';
+    document.getElementById('cs-status').className  = 'cs-val err';
+    document.getElementById('ribbon-url').textContent = getUrl();
+    document.getElementById('demo-ribbon').classList.remove('hidden');
+    setPill('error','Offline');
+  } finally { document.getElementById('log-spin').style.display='none'; }
+}
+
+function renderMetrics(s) {
+  document.getElementById('m-total').textContent = s.total    ?? 0;
+  document.getElementById('m-mrs').textContent   = s.mrs      ?? 0;
+  document.getElementById('m-warn').textContent  = s.warnings ?? 0;
+  document.getElementById('m-err').textContent   = s.errors   ?? 0;
+}
+function renderLogs(logs) {
+  const el = document.getElementById('log-list');
+  if(!logs.length){el.innerHTML='<div class="empty"><div class="empty-icon">📋</div>No logs yet — push code to GitLab to trigger agents</div>';return;}
+  el.innerHTML=logs.map(l=>`<div class="log-row"><span class="log-tag tag-${l.type||'info'}">${l.type||'info'}</span><span class="log-msg">${esc(l.message||'')}</span><span class="log-time">${ft(l.timestamp)}</span></div>`).join('');
+}
+function renderVulns(vulns) {
+  const el=document.getElementById('vuln-list');
+  document.getElementById('v-cnt').textContent=vulns.length;
+  if(!vulns.length){el.innerHTML='<div class="empty"><div class="empty-icon">✅</div>No vulnerabilities detected</div>';return;}
+  el.innerHTML=vulns.map(v=>{const vl=v.meta?.vulns||[],sv=v.meta?.severity||'medium';return`<div class="vuln-card"><div class="vuln-top"><span class="vuln-file">📄 ${esc(v.meta?.file||'unknown')}</span><span class="sev sev-${sv}">${sv}</span></div>${vl.map(x=>`<div style="margin-bottom:5px"><div class="vuln-type">${esc(x.type||'')}</div><div class="vuln-cwe">${esc(x.cwe||'')} — ${esc(x.description||'')}</div></div>`).join('')}${v.meta?.mrUrl?`<div class="vuln-mr" onclick="window.open('${esc(v.meta.mrUrl)}','_blank')">↗ View MR</div>`:''}</div>`;}).join('');
+}
+function renderMRs(logs) {
+  const mrs=logs.filter(l=>l.meta?.mrUrl),el=document.getElementById('mr-list');
+  if(!mrs.length){el.innerHTML='<div class="empty"><div class="empty-icon">🔀</div>No merge requests yet</div>';return;}
+  el.innerHTML=mrs.map(l=>`<div class="mr-row" onclick="window.open('${esc(l.meta.mrUrl)}','_blank')"><div class="mr-ico ico-open">🛡️</div><div class="mr-info"><div class="mr-title">MR !${l.meta.mrIid||'?'} — AI security fix</div><div class="mr-meta">${ft(l.timestamp)}</div></div><span class="mr-st st-open">open</span></div>`).join('');
+}
+
+function setStatus(s,msg){const b=document.getElementById('status-bar');b.className='status-bar '+s;document.getElementById('status-msg').textContent=msg;}
+function setPill(state,label){const p=document.getElementById('conn-pill');p.className='conn-pill'+(state==='connected'?' connected':state==='error'?' error':'');document.getElementById('conn-label').textContent=label;}
+
+function startPoll(){stopPoll();pollTimer=setInterval(fetchAll,5000);fetchAll();}
+function stopPoll(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
+
+function openScanMod(){document.getElementById('scan-res').classList.remove('show');document.getElementById('scan-modal').classList.add('open');}
+async function runScan(){
+  const proj=document.getElementById('s-proj').value.trim(),sha=document.getElementById('s-sha').value.trim(),branch=document.getElementById('s-branch').value.trim()||'main';
+  if(!proj||!sha){toast('Project ID and Commit SHA required','error');return;}
+  const btn=document.getElementById('scan-btn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Running...';
+  const res=document.getElementById('scan-res');res.classList.add('show');res.textContent='⏳ Sending to backend...';
+  try{const d=await api('/api/fix-all',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({projectId:proj,commitSha:sha,branch})});res.textContent='✅ '+(d.message||'Scan triggered!');toast('Scan triggered','success');setTimeout(fetchAll,3000);}
+  catch(e){res.textContent='❌ '+e.message+'\n\nMake sure backend is running with correct .env keys.';toast('Failed: '+e.message,'error');}
+  finally{btn.disabled=false;btn.innerHTML='Run Security Scan';}
+}
+function openClearMod(){document.getElementById('clear-modal').classList.add('open');}
+async function clearLogs(){closeMod('clear-modal');try{await api('/api/logs',{method:'DELETE'});toast('Logs cleared','success');fetchAll();}catch(e){toast('Could not clear: '+e.message,'error');}}
+
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const ft=ts=>{try{return ts?new Date(ts).toLocaleTimeString():'';}catch{return ts||'';}};
+
+// Init — auto-connect, no gates
+showPage('dashboard');
+document.getElementById('cs-url').textContent=getUrl().replace('http://','').replace('https://','');
+document.getElementById('ribbon-url').textContent=getUrl();
+fetch(getUrl()+'/health',{signal:AbortSignal.timeout(3000)}).then(r=>r.json()).then(d=>{backendUp=true;const s=getUrl().replace('http://','').replace('https://','');setPill('connected',s);document.getElementById('cs-uptime').textContent=Math.round(d.uptime)+'s';}).catch(()=>{setPill('error','Offline');});
+</script>
+</body>
+</html>
