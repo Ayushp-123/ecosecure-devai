@@ -1,33 +1,68 @@
 # EcoSecure DevAI 🛡️
 
-An AI-powered DevSecOps platform that automatically detects and fixes code vulnerabilities.
+### 🚀 AI-Powered DevSecOps Platform
+
+**Scan. Detect. Fix. Secure — all powered by AI.**
 
 ---
 
-## 🚀 Live Demo
+## 🌐 Live Demo
 
-Frontend: https://ecosecure-devai.netlify.app
-Backend: https://ecosecure-devai.onrender.com
+🔗 Frontend: https://ecosecure-devai.netlify.app
+⚙️ Backend: https://ecosecure-devai.onrender.com
 
 ---
 
-## 💡 Features
+## 📸 Product Preview
+
+### 🏠 Home
+
+![Home](./screenshots/home.png)
+
+### ⚡ Run Security Scan
+
+![Scan](./screenshots/scan.png)
+
+### 📊 Dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
+---
+
+## 💡 What is EcoSecure DevAI?
+
+EcoSecure DevAI is a full-stack AI-powered DevSecOps platform that automates security in modern development workflows.
+
+It scans repositories, detects vulnerabilities, generates AI-based fixes, and simulates automated remediation — all through a clean, interactive dashboard.
+
+---
+
+## ⚙️ Key Features
 
 * 🔍 AI-based vulnerability detection
-* ⚡ Automatic fix suggestions
-* 📊 Real-time dashboard
+* ⚡ Automatic fix generation
+* 📊 Real-time dashboard analytics
 * 🧾 Logs and activity tracking
-* 🚀 Simulated DevSecOps pipeline
+* 🚀 Interactive scan workflow
+* 🔐 Simulated DevSecOps pipeline
 
 ---
 
 ## 🧠 How It Works
 
-1. User triggers a scan
-2. Backend analyzes code using AI
-3. Vulnerabilities are detected
-4. Fix suggestions are generated
-5. Results displayed on dashboard
+```text
+User triggers scan
+        ↓
+Backend receives request
+        ↓
+AI analyzes repository
+        ↓
+Vulnerabilities detected
+        ↓
+Fix suggestions generated
+        ↓
+Results shown on dashboard
+```
 
 ---
 
@@ -38,35 +73,52 @@ Backend: https://ecosecure-devai.onrender.com
 * Express.js
 * HTML, CSS
 * Google Gemini API
-* Render (Backend Hosting)
-* Netlify (Frontend Hosting)
+
+### ☁️ Deployment
+
+* Render (Backend)
+* Netlify (Frontend)
 
 ---
 
-## 🧪 Testing
+## 🧪 How to Test
 
-1. Open the web app
-2. Click "Trigger Scan"
-3. Enter demo values
-4. View vulnerabilities and logs
+1. Open the live website
+2. Click **Run Scan**
+3. Enter demo values (or leave default)
+4. Start scan
+5. View vulnerabilities and logs
+
+---
+
+## 📂 Project Structure
+
+```
+/ecosecure-devai
+ ├── backend/
+ ├── frontend/
+ ├── screenshots/
+ ├── README.md
+```
 
 ---
 
 ## 🎯 Future Improvements
 
-* Real GitLab integration
-* Automated merge requests
-* CI/CD pipeline integration
-* Database support
+* 🔗 Real GitLab integration
+* 🔀 Automated merge requests
+* ⚙️ CI/CD pipeline integration
+* 🗄️ Database for scan history
+* 📊 Advanced analytics & charts
 
 ---
 
 ## 👨‍💻 Author
 
-Ayush Patnayak
+**Ayush Patnayak**
 
 ---
 
 ## ⭐ Tagline
 
-**Push code, we secure it.**
+> **Push code, we secure it.**
